@@ -1,13 +1,15 @@
 from telethon import TelegramClient, events
+from telethon.sessions import StringSession
 import os
 
 api_id = int(os.environ.get("API_ID"))
 api_hash = os.environ.get("API_HASH")
+session_string = os.environ.get("SESSION_STRING")
 
 source_channel = os.environ.get("SOURCE_CHANNEL")
 target_channel = os.environ.get("TARGET_CHANNEL")
 
-client = TelegramClient("session", api_id, api_hash)
+client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
 @client.on(events.NewMessage(chats=source_channel))
 async def handler(event):
@@ -24,4 +26,4 @@ async def main():
 with client:
     client.loop.run_until_complete(main())
     client.run_until_disconnected()
-  
+    
